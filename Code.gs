@@ -244,7 +244,8 @@ function emailForm(request)
   
   if(MailApp.getRemainingDailyQuota() < request.members.length)
     throw new Error("Email Quota too low! " +  MailApp.getRemainingDailyQuota());
-
+  
+  var debugEmail = PropertiesService.getScriptProperties().getProperty('DEBUG_TO_EMAIL');
   
   var count = 0;
   
@@ -258,8 +259,15 @@ function emailForm(request)
       
       var formLink = buildPrefilledFormUrl(m.member.id, memberName,fieldInfo,e,request.team.name.toUpperCase());
              
+      var to = e;
+      
+      if(debugEmail)
+      {
+         to = debugEmail;
+      }
+      
       var email = {
-        to: 'paul_kotlyar@hotmail.com',
+        to: to,
         subject: request.subject,     
         name: request.team.name.toUpperCase(),       
         htmlBody: request.body + "<br><br>" +

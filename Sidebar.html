@@ -81,7 +81,7 @@ input[type=text], textarea {
 <div style="display:block;margin-top:5px"><b>Email Subject</b> <input type="text" ng-model="sidebar.emailSubject" size="60"/></div>
 <div style="display:block;margin-top:5px"><b>Email Body</b><textarea ng-model="sidebar.emailBody" rows="10" cols="40"></textarea></div>
 <div ng-show="sidebar.validationErrors" style=" background-color: red; color:white; margin: 8px 0;padding: 12px 12px;border-radius: 4px;">{{sidebar.validationErrors}}</div>
-<div style="display:block;margin-top:10px;text-align:right"><button ng-click="sidebar.submit()">Send Form</button></div>
+<div style="display:block;margin-top:10px;text-align:right"><button ng-disabled="sidebar.isSubmitting" ng-click="sidebar.submit()">Send Form</button></div>
 </fieldset>
 </div>
   <script>

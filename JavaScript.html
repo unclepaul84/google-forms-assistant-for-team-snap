@@ -46,6 +46,7 @@
     self.emailSubject = 'Please Respond to this survey!';
     self.emailBody = null;
     self.validationErrors=null;
+    self.isSubmitting = false;
     
     // Watch for changes to isSignedIn.
     $scope.$watch('sidebar.isSignedIn', function(isSignedIn) {
@@ -131,11 +132,11 @@
   
   
   SidebarController.prototype.submit = function() {
-   
-
-    
+       
    var self = this;
-   
+
+   self.isSubmitting =true;
+
    self.validationErrors='';
  
    var team = self.activeTeams.filter(function(t) {return t.id == self.selectedTeamId;})[0];
@@ -145,13 +146,17 @@
    if(!self.selectedTeamId)
    {
      self.validationErrors='Must select team';
-    
+     
+     self.isSubmitting = false;
+     
      return;
+     
+    
    }
 
    if(members.length ==0)
     { 
-    
+      self.isSubmitting = false;
      self.validationErrors='Must select at least one member';
     
      return;
@@ -160,8 +165,10 @@
  
    if(self.emailSubject == "")
     { 
+     
+     self.isSubmitting = false;
     
-     self.validationErrors='Must provide subject';
+    self.validationErrors='Must provide subject';
     
      return;
      
@@ -171,12 +178,14 @@
     
    self.script.emailForm(request).then(function(r){
    
-     console.warn(request);
+     
    
      google.script.host.close();
    
    }, function(e){
    
+        self.isSubmitting = false;
+     
         self.validationErrors=e.toString();
    
    });
