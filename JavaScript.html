@@ -190,7 +190,7 @@
   SidebarController.prototype.signIn = function() {
     var self = this;
     self.script.getAuthorizationUrl().then(function(authorizationUrl) {
-      self.$window.open(authorizationUrl);
+      self.$window.open(authorizationUrl, "TeamSnap Auth", "width=700,height=500");
     }, self.handleError);
   };
     

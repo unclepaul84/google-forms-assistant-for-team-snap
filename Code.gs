@@ -39,7 +39,7 @@ function showSidebar() {
       .setTitle(SIDEBAR_TITLE)
       .setSandboxMode(HtmlService.SandboxMode.IFRAME);
   
-  ensureMemberIdAndMemberNameFieldsPresentOnForm();
+  ensureTrackingFieldsPresentOnForm();
   
   page.setWidth(600);
   page.setHeight(800);
@@ -248,7 +248,7 @@ function emailForm(request)
   
   var count = 0;
   
-  var fieldInfo = ensureMemberIdAndMemberNameFieldsPresentOnForm();
+  var fieldInfo = ensureTrackingFieldsPresentOnForm();
    
   request.members.forEach(function(m){
   
@@ -256,11 +256,11 @@ function emailForm(request)
          
       var memberName =  m.member.firstName + ' ' +  m.member.lastName;
       
-      var formLink = buildPrefilledFormUrl(m.member.id, memberName,fieldInfo);
+      var formLink = buildPrefilledFormUrl(m.member.id, memberName,fieldInfo,e,request.team.name.toUpperCase());
              
       var email = {
         to: 'paul_kotlyar@hotmail.com',
-        subject: '['+ request.team.name.toUpperCase() + ']' + request.subject,     
+        subject: request.subject,     
         name: request.team.name.toUpperCase(),       
         htmlBody: request.body + "<br><br>" +
         "<a href='" + formLink + "'>Here</a> is a link to this form."}
@@ -274,10 +274,10 @@ function emailForm(request)
   
   });
   
-  FormApp.getUi().alert(count +  ' Notifications were sent.');
+  FormApp.getUi().alert(count + ' Notifications were sent.');
 }
 
-function buildPrefilledFormUrl(memberId, memberName, fieldInfo) {  
+function buildPrefilledFormUrl(memberId, memberName, fieldInfo, email, teamName) {  
 
  var form = FormApp.getActiveForm();  
    
@@ -286,15 +286,16 @@ function buildPrefilledFormUrl(memberId, memberName, fieldInfo) {
  var memberIdField = fieldInfo.memberIdField.asTextItem();
   
  var memberNameField = fieldInfo.memberNameField.asTextItem();
-    
-  var response = memberIdField.createResponse(memberId.toString());     
-  
-  formResponse.withItemResponse(response);
-  
-  var response2 = memberNameField.createResponse(memberName.toString());        
- 
-  formResponse.withItemResponse(response2);
 
+ var memberEmailField =   fieldInfo.memberEmailField.asTextItem();
+
+ var memberTeamField =   fieldInfo.memberTeamField.asTextItem();
+
+  formResponse.withItemResponse(memberIdField.createResponse(memberId.toString()));
+  formResponse.withItemResponse(memberNameField.createResponse(memberName.toString()));
+  formResponse.withItemResponse(memberEmailField.createResponse(email));
+  formResponse.withItemResponse(memberTeamField.createResponse(teamName));
+  
   //Creates URL with pre-filled data
   var url = formResponse.toPrefilledUrl();
 
@@ -328,25 +329,34 @@ var MEMBER_ID_FIELD_NAME='TSMemberId';
 
 var MEMBER_NAME_FIELD_NAME='TSMemberName';
 
-function ensureMemberIdAndMemberNameFieldsPresentOnForm()
+var MEMBER_EMAIL_FIELD_NAME='TSMemberEmail';
+
+var MEMBER_TEAM_FIELD_NAME='TSMemberTeam';
+
+
+function ensureTrackingFieldsPresentOnForm()
 {
-  var form = FormApp.getActiveForm();
-  
-  var memberIdField = findTextFieldByName(MEMBER_ID_FIELD_NAME);
-  
-  var memberNameField = findTextFieldByName(MEMBER_NAME_FIELD_NAME);
- 
-  if(!memberIdField)
-  {
-     memberNameField= createTextFieldByName(MEMBER_NAME_FIELD_NAME);  
-    
-     memberIdField = createTextFieldByName(MEMBER_ID_FIELD_NAME);
-    
-  }
-    
-  return {memberIdField:memberIdField, memberNameField:memberNameField};
+  return {
+    memberIdField:findOrCreateTextFieldByName(MEMBER_ID_FIELD_NAME),      
+    memberNameField:findOrCreateTextFieldByName(MEMBER_NAME_FIELD_NAME),      
+    memberEmailField:findOrCreateTextFieldByName(MEMBER_EMAIL_FIELD_NAME),      
+    memberTeamField:findOrCreateTextFieldByName(MEMBER_TEAM_FIELD_NAME),      
+  };
 }
 
+
+function findOrCreateTextFieldByName(name)
+{
+ 
+  var field = findTextFieldByName(name);
+  
+  if(!field)
+  {
+    field = createTextFieldByName(name);
+  }
+  
+  return field;
+}
 
 function createTextFieldByName(name)
 {
