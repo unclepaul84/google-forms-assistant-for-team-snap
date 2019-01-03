@@ -1,0 +1,218 @@
+<!--
+/**
+ * Copyright 2018 Paul kotlyar. All Rights Reserved.
+ */
+ -->
+<script>
+  /**
+   * Create a wrapped version of google.script.run that
+   * is adapted for Angular promises.
+   */
+  var ScriptService = function($q) {
+    var self = this; 
+    var promisify = function(key) {
+      return function() {      
+        var args = arguments;
+        return $q(function(resolve, reject) {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)
+            [key].apply(google.script.run, args);
+        });
+      };
+    };
+    angular.forEach(google.script.run, function(_, key) {
+      self[key] = promisify(key)
+    });
+  };
+
+  /**
+   * The controller for the sidebar.
+   */
+  var SidebarController = function($scope, $window, script, intercom) {
+    var self = this;
+    
+    // Hold onto some dependencies.
+    self.$window = $window;
+    self.script = script;
+    
+    // Initialize state.
+    self.email = $window.email;
+    self.isSignedIn = $window.isSignedIn;
+    self.userProfile = null;
+    self.selectedTeamId = null;
+    self.activeTeams = null;
+    self.selectedMembers = null;
+    self.emailSubject = 'Please Respond to this survey!';
+    self.emailBody = null;
+    self.validationErrors=null;
+    
+    // Watch for changes to isSignedIn.
+    $scope.$watch('sidebar.isSignedIn', function(isSignedIn) {
+      if (isSignedIn) {
+        script.getTSProfileProfile().then(function(user) {
+          self.userProfile = user;
+          
+          
+          
+         script.getTSActiveTeams(self.userProfile.id).then(function(teams) {
+                self.activeTeams = teams;
+                
+            
+               }, self.handleError);
+          
+          
+        }, self.handleError);
+
+      } else {
+        self.userProfile = null;
+        self.activeTeams = null;
+          
+      }
+    });
+    
+      
+    $scope.$watch('sidebar.selectedTeamId', function(selectedTeamId) {
+      
+    if(selectedTeamId)
+    {
+       script.getTSMembersWhichCanBeEmailed(selectedTeamId).then(function(members) {
+
+               self.selectedMembers = [];
+               
+               members.sort(function(a,b){
+               
+                 if(a.isNonPlayer && !b.isNonPlayer)
+                    return 1;
+                 if(!a.isNonPlayer && b.isNonPlayer)
+                    return -1;
+                 
+                 if(!a.isNonPlayer && !b.isNonPlayer)
+                 {
+                    if(a.lastName.toUpperCase() > b.lastName.toUpperCase())
+                    {
+                      return 1;
+                    }
+                     if(a.lastName.toUpperCase() < b.lastName.toUpperCase())
+                    {
+                      return -1;
+                    }
+                    
+                    return 0;
+                 }
+               
+                  return 0;
+               });
+               
+               members.forEach(function(m){
+                      
+                   self.selectedMembers.push({"member":m, "selected": !m.isNonPlayer});
+               
+               });
+
+               }, self.handleError);
+
+    }
+     
+    });
+    
+    
+    // Listen for the event that indicates that the OAuth flow has completed.
+    intercom.on('oauthComplete', function(data) {
+      // Make sure the event is for the same Google account.
+      if (data.email === self.email) {
+        $scope.$apply(function() {
+          self.isSignedIn = data.isSignedIn;
+        });
+      }
+    });
+  };
+  
+  
+  
+  SidebarController.prototype.submit = function() {
+   
+
+    
+   var self = this;
+   
+   self.validationErrors='';
+ 
+   var team = self.activeTeams.filter(function(t) {return t.id == self.selectedTeamId;})[0];
+   
+   var members =  self.selectedMembers.filter(function(m) {  return m.selected; });
+
+   if(!self.selectedTeamId)
+   {
+     self.validationErrors='Must select team';
+    
+     return;
+   }
+
+   if(members.length ==0)
+    { 
+    
+     self.validationErrors='Must select at least one member';
+    
+     return;
+     
+    }
+ 
+   if(self.emailSubject == "")
+    { 
+    
+     self.validationErrors='Must provide subject';
+    
+     return;
+     
+    }
+ 
+   var request = {subject:self.emailSubject, body: self.emailBody, team: team, members: members};
+    
+   self.script.emailForm(request).then(function(r){
+   
+     console.warn(request);
+   
+     google.script.host.close();
+   
+   }, function(e){
+   
+        self.validationErrors=e.toString();
+   
+   });
+    
+    
+
+  };
+  
+  
+  // Handler for the sign in button.
+  SidebarController.prototype.signIn = function() {
+    var self = this;
+    self.script.getAuthorizationUrl().then(function(authorizationUrl) {
+      self.$window.open(authorizationUrl);
+    }, self.handleError);
+  };
+    
+  // Handler for the sign out button.
+  SidebarController.prototype.signOut = function() {
+    var self = this;
+    self.script.signOut().then(function() {
+      self.isSignedIn = false;
+    }, self.handleError);
+  };
+
+  // A generic handler for script errors.
+  SidebarController.prototype.handleError = function(error) {
+    var self = this;
+    console.error(error);
+ 
+  };
+
+  var module = angular.module('sidebarApp', [])
+    .service('script', ScriptService)
+    .service('intercom', function() {
+      return Intercom.getInstance();
+    })
+    .controller('SidebarController', SidebarController);
+</script>

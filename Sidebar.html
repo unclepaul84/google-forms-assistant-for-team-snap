@@ -1,0 +1,93 @@
+<!--
+ /**
+ * Copyright 2018 Paul kotlyar. All Rights Reserved.
+ */
+
+ -->
+<!DOCTYPE html>
+<html ng-app="sidebarApp">
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intercom.js/0.1.4/intercom.min.js"></script> 
+  <style>
+ul.checkbox  { 
+  margin: 0; 
+  padding: 0; 
+  margin-left: 20px; 
+  list-style: none; 
+} 
+
+ul.checkbox li input { 
+  margin-right: .25em; 
+} 
+
+ul.checkbox li { 
+  border: 1px transparent solid; 
+  display:inline-block;
+  width:12em;
+} 
+
+ul.checkbox li label { 
+  margin-left: ; 
+} 
+
+select{
+  width: 100%;
+  margin: 8px 0;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+input[type=text], textarea {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+</style>
+</head>
+<body ng-controller="SidebarController as sidebar">
+  <div ng-show="!sidebar.isSignedIn">
+    <p>Please sign in to your TeamSnap account to continue.</p>
+    <button ng-click="sidebar.signIn()">Sign in</button>
+  </div>
+  <div ng-show="sidebar.isSignedIn">
+
+<div>
+ <img style='vertical-align:middle;max-width:150px;height: auto;' src='https://www.teamsnap.com/user/themes/teamsnap/images/logo.svg'>
+ <div style="vertical-align:middle;text-align:right"> <span>{{sidebar.userProfile.email || '...' }} | <a ng-click="sidebar.signOut()">Sign out</a></span></div>
+</div>
+
+<div>   
+<fieldset class="form-group">
+  <legend>Configuration</legend>
+  <b>Team</b>
+  <select ng-model="sidebar.selectedTeamId"  id="teamId">
+   <option ng-repeat="x in sidebar.activeTeams" value="{{x.id}}">{{x.name}}</option>
+   </select>
+ 
+<fieldset> 
+<legend>Select Members</legend> 
+<ul class="checkbox"> 
+  <li  ng-repeat="m in sidebar.selectedMembers"><input type="checkbox" id="{{m.member.id}}"  ng-model="m.selected" /><label for="{{m.member.id}}">{{m.member.firstName}} {{m.member.lastName}}</label></li> 
+</ul> 
+</fieldset> 
+
+<div style="display:block;margin-top:5px"><b>Email Subject</b> <input type="text" ng-model="sidebar.emailSubject" size="60"/></div>
+<div style="display:block;margin-top:5px"><b>Email Body</b><textarea ng-model="sidebar.emailBody" rows="10" cols="40"></textarea></div>
+<div ng-show="sidebar.validationErrors" style=" background-color: red; color:white; margin: 8px 0;padding: 12px 12px;border-radius: 4px;">{{sidebar.validationErrors}}</div>
+<div style="display:block;margin-top:10px;text-align:right"><button ng-click="sidebar.submit()">Send Form</button></div>
+</fieldset>
+</div>
+  <script>
+    var email = '<?= email ?>';
+    var isSignedIn = '<?= isSignedIn ?>' == 'true';
+  </script>
+  <?!= include('JavaScript') ?>
+</body>
+</html>
