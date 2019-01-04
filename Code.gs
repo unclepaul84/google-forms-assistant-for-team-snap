@@ -42,7 +42,7 @@ function showSidebar() {
   ensureTrackingFieldsPresentOnForm();
   
   page.setWidth(600);
-  page.setHeight(800);
+  page.setHeight(700);
   
   FormApp.getUi().showModalDialog(page,SIDEBAR_TITLE);
 }
@@ -53,6 +53,12 @@ function showSidebar() {
  */
 function getAuthorizationUrl() {
   return getTSAuthService_().getAuthorizationUrl();
+}
+
+
+function getRemainingEmailDailyQuota(){
+ 
+  return MailApp.getRemainingDailyQuota();
 }
 
 /**
@@ -245,7 +251,7 @@ function emailForm(request)
   if(MailApp.getRemainingDailyQuota() < request.members.length)
     throw new Error("Email Quota too low! " +  MailApp.getRemainingDailyQuota());
   
-  var debugEmail = PropertiesService.getScriptProperties().getProperty('DEBUG_TO_EMAIL');
+  var debugEmail = PropertiesService.getScriptProperties().getProperty('DEBUG_TO_EMAIL'); //allow to use a script property to send all emails to single email address
   
   var count = 0;
   

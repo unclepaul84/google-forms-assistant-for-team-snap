@@ -47,14 +47,14 @@
     self.emailBody = null;
     self.validationErrors=null;
     self.isSubmitting = false;
-    
+ 
     // Watch for changes to isSignedIn.
     $scope.$watch('sidebar.isSignedIn', function(isSignedIn) {
       if (isSignedIn) {
         script.getTSProfileProfile().then(function(user) {
           self.userProfile = user;
           
-          
+         
           
          script.getTSActiveTeams(self.userProfile.id).then(function(teams) {
                 self.activeTeams = teams;
@@ -80,7 +80,8 @@
        script.getTSMembersWhichCanBeEmailed(selectedTeamId).then(function(members) {
 
                self.selectedMembers = [];
-               
+
+               ///sort by last name, pushing non players to the buttom of the list
                members.sort(function(a,b){
                
                  if(a.isNonPlayer && !b.isNonPlayer)
@@ -157,7 +158,7 @@
    if(members.length ==0)
     { 
       self.isSubmitting = false;
-     self.validationErrors='Must select at least one member';
+      self.validationErrors='Must select at least one member';
     
      return;
      
@@ -168,7 +169,7 @@
      
      self.isSubmitting = false;
     
-    self.validationErrors='Must provide subject';
+     self.validationErrors='Must provide subject';
     
      return;
      
@@ -177,8 +178,6 @@
    var request = {subject:self.emailSubject, body: self.emailBody, team: team, members: members};
     
    self.script.emailForm(request).then(function(r){
-   
-     
    
      google.script.host.close();
    
