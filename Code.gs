@@ -42,7 +42,7 @@ function showSidebar() {
   ensureTrackingFieldsPresentOnForm();
   
   page.setWidth(600);
-  page.setHeight(700);
+  page.setHeight(800);
   
   FormApp.getUi().showModalDialog(page,SIDEBAR_TITLE);
 }
