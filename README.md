@@ -7,7 +7,7 @@ TeamSnap Assistant is an add-on for Google Forms which allows team managers to b
 Uniform order forms, Tournament date surveys or any other information collection has never been easier thanks to the power of Google Forms!
 
 
-##### How to use
+### Getting Started
 1. [Design and test a Google Form to your liking](https://gsuite.google.com/learning-center/products/forms/get-started/#!/). Do not include fields for Member Name, Email and Team Name. These will be added automatically.
 2. Install TeamSnap Assistant addin from plugins menu. 
 3. Sign in with TeamSnap credentials.
