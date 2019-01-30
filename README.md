@@ -21,5 +21,6 @@ Uniform order forms, Tournament date surveys or any other information collection
 9. Members will get an email with personalized link which takes them to this form with tracking fields pre-filled.
 10. If you linked your form to Google Sheets you can view submitted responses there.
 11. If you have any issue submit them [here](https://github.com/unclepaul84/google-forms-assistant-for-team-snap/issues).
+
 ![Screenshot](https://github.com/unclepaul84/google-forms-assistant-for-team-snap/raw/master/tutorial.gif)
 
