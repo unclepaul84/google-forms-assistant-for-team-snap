@@ -1,4 +1,4 @@
-## TeamSnap Assistant for Google Forms
+## TeamSnap Assistant for Google Forms (TeamSnap Surveys)
 
 **What is TeamSnap Assistant for Google Forms?**
 
