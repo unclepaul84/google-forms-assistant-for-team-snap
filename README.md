@@ -1,3 +1,5 @@
+![Screenshot](https://github.com/unclepaul84/google-forms-assistant-for-team-snap/raw/master/teamsnap.jpg)
+
 ## TeamSnap Assistant for Google Forms (TeamSnap Surveys) 
 
 Note: This addon is developed by third party.
