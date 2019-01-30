@@ -18,7 +18,7 @@ TeamSnap Assistant is an add-on for Google Forms which allows team managers to b
 4. Sign in with TeamSnap credentials.
 5. Choose your team.
 6. Select members to send this form to.
-7. Provide Subject and Body values. (basic HTML tags are allowed in Body field)
+7. Populate Subject and Body fields. (basic HTML tags are allowed in Body field)
 8. Hit "send".
 9. Members will get an email with personalized link which takes them to this form with tracking fields pre-filled.
 10. If you linked your form to Google Sheets you can view submitted responses there.
