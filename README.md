@@ -1,4 +1,6 @@
-## TeamSnap Assistant for Google Forms (TeamSnap Surveys)
+## TeamSnap Assistant for Google Forms (TeamSnap Surveys) 
+
+Note: This addon is developed by third party.
 
 **What is TeamSnap Assistant for Google Forms?**
 
