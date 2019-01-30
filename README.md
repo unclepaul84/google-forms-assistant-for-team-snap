@@ -16,6 +16,6 @@ Uniform order forms, Tournament date surveys or any other information collection
 6. Provide Subject and Body values. (basic HTML tags are allowed in Body field)
 7. Click Send.
 8. Members will get an email with personalized link which takes them to this form with tracking fields pre-filled.
-9. If you linked your form to Google Sheet you can view submitted responses there.
+9. If you linked your form to Google Sheets you can view submitted responses there.
 
 ![Screenshot](https://github.com/unclepaul84/google-forms-assistant-for-team-snap/blob/master/tutorial.gif)
