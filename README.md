@@ -1,5 +1,10 @@
-# Google Forms assistant for TeamSnap
-Google Forms addin which provides ability to easily send google forms to TeamSnap members.
+## TeamSnap Assistant for Google Forms
+
+**What is TeamSnap Assistant for Google Forms?**
+
+TeamSnap Assistant is an add-on for Google Forms which allows team managers to bring the power Google Forms to Team Snap teams. With a few clicks team manager can choose a team, pick members and send a Google Form, prefilled with tracking fields. Member responses can be directed to a Google Sheet complete with tracking fields.
+
+Uniform order forms, Tournament date surveys or any other information collection has never been easier thanks to the power of Google Forms!
 
 
 ##### How to use
