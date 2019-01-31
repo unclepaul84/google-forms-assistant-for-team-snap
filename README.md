@@ -22,7 +22,7 @@ TeamSnap Assistant is an add-on for Google Forms which allows team managers to b
 8. Hit "send".
 9. Members will get an email with personalized link which takes them to this form with tracking fields pre-filled.
 10. If you linked your form to Google Sheets you can view submitted responses there.
-11. If you have any issue  email [google-forms-assistant-for-team-snap@googlegroups.com](mailto:google-forms-assistant-for-team-snap@googlegroups.com)
+11. If you have any issues shoot an email to [google-forms-assistant-for-team-snap@googlegroups.com](mailto:google-forms-assistant-for-team-snap@googlegroups.com)
 
 ![Screenshot](https://github.com/unclepaul84/google-forms-assistant-for-team-snap/raw/master/tutorial.gif)
 
